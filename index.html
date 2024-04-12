@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Bootstrap demo</title>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+   <script type="importmap">
+         {
+            "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/"
+            }
+         }
+   </script>
+</head>
+
+<body style="background-color: gray;">
+   <script type="module">
+      import * as THREE from 'three';
+      import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+      // Instantiate a loader
+      const scene = new THREE.Scene();
+      const loader = new GLTFLoader();
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 100);
+      directionalLight.position.set(0, 1, 0);
+      directionalLight.castShadow = true;
+      scene.add(directionalLight);
+      // Load a glTF resource
+      loader.load(
+         // resource URL
+         './pasta-v1.glb',
+         // called when the resource is loaded
+         function (gltf) {
+            const model = gltf.scene;
+            model.scale.set(1500, 1500, 1500); // 將模型的大小縮小一半
+            scene.add(model);
+         },
+         // called while loading is progressing
+         function (xhr) {
+            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+         },
+         // called when loading has errors
+         function (error) {
+            console.error(`${error}`);
+         }
+      );
+
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+   </script>
+</body>
+
+</html>
